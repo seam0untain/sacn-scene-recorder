@@ -1,7 +1,7 @@
 const sqliteConfiguration = {
     client: 'better-sqlite3',
     connection: {
-        filename: './scenes.sqlite3',
+        filename: './config/scenes.sqlite3',
     },
     useNullAsDefault: true,
 };

@@ -16,11 +16,12 @@ import {
 import { RootState } from './redux/store';
 import { getScenes } from './redux/scenesSlice';
 import { WebsocketCommand } from '../models';
+import type { Server } from 'http';
 
 const logPrefix = '[WS CMD]';
 
-export const configureWebsockets = (store: Store<RootState>, port: number, onConfigured: () => void) => {
-    const wss = new WebSocketServer({ port });
+export const configureWebsockets = (server: Server, store: Store<RootState>, onConfigured: () => void) => {
+    const wss = new WebSocketServer({server} );
 
     wss.on('connection', (ws) => {
         ws.on('error', console.error);

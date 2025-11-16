@@ -19,7 +19,6 @@ const appName = 'sACN Scene Recorder';
 
 app.prepare().then(async () => {
     const port: number = parseInt(process?.env?.PORT ?? '3000', 10);
-    const webSocketsPort: number = parseInt(process?.env?.NEXT_PUBLIC_WEBSOCKETS_PORT ?? '8080', 10);
     const universes: number[] = JSON.parse(process.env.NEXT_PUBLIC_UNIVERSES_JSON ?? '[1]');
     const priority: number = parseInt(process.env.NEXT_PUBLIC_PRIO ?? '90');
 
@@ -30,6 +29,10 @@ app.prepare().then(async () => {
     const mqttSourceId: string = process.env.MQTT_SOURCE_ID ?? 'sacn-scene-recorder';
 
     const server = express();
+    
+    const httpserver = server.listen(port, () => {
+        console.log(`> Webserver ready on http://localhost:${port}`);
+    });
 
     // Load state from SQLite
     //
@@ -59,8 +62,8 @@ app.prepare().then(async () => {
 
     // Configure WebSockets
     //
-    const websocketsData = configureWebsockets(store, webSocketsPort, () =>
-        console.log(`> WebSockets ready on port ${webSocketsPort}`),
+    const websocketsData = configureWebsockets(httpserver, store, () =>
+        console.log(`> WebSockets ready`),
     );
 
     // Configure MQTT
@@ -117,10 +120,6 @@ app.prepare().then(async () => {
 
     server.all('*', (req, res) => {
         return handle(req, res);
-    });
-
-    server.listen(port, () => {
-        console.log(`> Webserver ready on http://localhost:${port}`);
     });
 });
 

@@ -44,12 +44,10 @@ yarn start
 Available configuration i _.env.local_:
 
 ```
-NEXT_PUBLIC_HOST=[IP or Hostname, for example "localhost"]
 NEXT_PUBLIC_CATEGORIES_JSON=[JSON list of categories, for example '["Category 1", "Category 2"]']
 NEXT_PUBLIC_UNIVERSES_JSON=[JSON list of categories, for example '[1,2,3,4]']
 NEXT_PUBLIC_PRIO=[Prio as number, for example 90]
 PORT=[HTTP Port as number, for example 80]
-NEXT_PUBLIC_WEBSOCKETS_PORT=[Websockets Port as number, for example 8000]
 
 MQTT_TOPIC=[MQTT Topic for this service, optional]
 MQTT_BROKER=[MQTT broker url including mqtt protocol, optional]

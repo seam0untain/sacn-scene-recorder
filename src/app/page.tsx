@@ -1,7 +1,7 @@
 'use client';
 
 import { SceneData, WebsocketCommand } from '@/models';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
@@ -9,9 +9,15 @@ import SceneCategory from './components/sceneCategory';
 
 export default function Home() {
     const [isEditing, setIsEditing] = useState(false);
-    
-    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const webSocketUrl = protocol + process.env.NEXT_PUBLIC_HOST + ':' + process.env.NEXT_PUBLIC_WEBSOCKETS_PORT;
+    const [webSocketUrl, setWebSocketUrl] = useState<string|null>(null);
+
+    useEffect(() => {
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const webSocketUrl = protocol + window.location.host;
+
+        setWebSocketUrl(webSocketUrl);
+  }, []);
+
     const { sendMessage, lastJsonMessage, readyState } = useWebSocket<{ scenes: SceneData[] }>(webSocketUrl, {
         shouldReconnect: () => true,
     });

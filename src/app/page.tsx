@@ -13,9 +13,7 @@ export default function Home() {
 
     useEffect(() => {
         const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-        const webSocketUrl = protocol + window.location.host;
-
-        setWebSocketUrl(webSocketUrl);
+        setWebSocketUrl(protocol + window.location.host);
   }, []);
 
     const { sendMessage, lastJsonMessage, readyState } = useWebSocket<{ scenes: SceneData[] }>(webSocketUrl, {

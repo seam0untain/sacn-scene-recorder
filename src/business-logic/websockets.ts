@@ -20,7 +20,7 @@ import type { Server } from 'http';
 
 const logPrefix = '[WS CMD]';
 
-export const configureWebsockets = (server: Server, store: Store<RootState>, onConfigured: () => void) => {
+export const configureWebsockets = (server: Server, store: Store<RootState>, universes: number[], categories: string[], onConfigured: () => void) => {
     const wss = new WebSocketServer({server} );
 
     wss.on('connection', (ws) => {
@@ -34,6 +34,8 @@ export const configureWebsockets = (server: Server, store: Store<RootState>, onC
             JSON.stringify({
                 scenes: getScenes(store.getState()),
                 sceneStatus: getSceneStatus(getScenes(store.getState())),
+                universes,
+                categories,
             }),
         );
     });
@@ -44,7 +46,7 @@ export const configureWebsockets = (server: Server, store: Store<RootState>, onC
         broadcast: (data: any, isBinary: boolean) =>
             wss.clients.forEach(function each(client) {
                 if (client.readyState === WebSocket.OPEN) {
-                    client.send(data, { binary: isBinary });
+                    client.send(JSON.stringify({...data, universes, categories}), { binary: isBinary });
                 }
             }),
         closeAll: () => wss.clients.forEach((x) => x.close()),

@@ -19,8 +19,9 @@ const appName = 'sACN Scene Recorder';
 
 app.prepare().then(async () => {
     const port: number = parseInt(process?.env?.PORT ?? '3000', 10);
-    const universes: number[] = JSON.parse(process.env.NEXT_PUBLIC_UNIVERSES_JSON ?? '[1]');
-    const priority: number = parseInt(process.env.NEXT_PUBLIC_PRIO ?? '90');
+    const universes: number[] = JSON.parse(process.env.UNIVERSES_JSON ?? '[1]');
+    const categories: string[] = JSON.parse(process.env.CATEGORIES_JSON ?? '[]');
+    const priority: number = parseInt(process.env.SACN_PRIORITY ?? '90');
 
     const mqttTopic: string = process.env.MQTT_TOPIC ?? '';
     const mqttBrokerUri: string = process.env.MQTT_BROKER ?? '';
@@ -62,7 +63,7 @@ app.prepare().then(async () => {
 
     // Configure WebSockets
     //
-    const websocketsData = configureWebsockets(httpserver, store, () =>
+    const websocketsData = configureWebsockets(httpserver, store, universes, categories, () =>
         console.log(`> WebSockets ready`),
     );
 
@@ -83,7 +84,7 @@ app.prepare().then(async () => {
         (x) => x.scenes,
         async (scenes) => {
             sendOnce();
-            websocketsData.broadcast(JSON.stringify({ scenes: scenes, sceneStatus: getSceneStatus(scenes) }), false);
+            websocketsData.broadcast({ scenes: scenes, sceneStatus: getSceneStatus(scenes) }, false);
             mqttData.sendStatusWithDebounce();
             await saveScenesWithDecounce(scenes);
         },

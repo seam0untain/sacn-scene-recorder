@@ -14,10 +14,11 @@ type Props = {
     isEditing: boolean;
     categoryName: string;
     allScenes: SceneData[];
+    universes: number[];
     sendCommand: (command: WebsocketCommand) => void;
 };
 
-const SceneCategory: FC<Props> = ({ sendCommand, allScenes, categoryName, isEditing, disabled }: Props) => {
+const SceneCategory: FC<Props> = ({ sendCommand, allScenes, categoryName, isEditing, disabled, universes }: Props) => {
     var [date, setDate] = useState(Date.now());
     const [sceneToEdit, setSceneToEdit] = useState<SceneData | null>(null);
 
@@ -60,6 +61,7 @@ const SceneCategory: FC<Props> = ({ sendCommand, allScenes, categoryName, isEdit
                                     nextSortIndex={nextSortIndex}
                                     setSceneToEdit={setSceneToEdit}
                                     sendCommand={sendCommand}
+                                    universes={universes}
                                 />
                             </div>
                         ) : null}

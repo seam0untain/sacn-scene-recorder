@@ -44,9 +44,9 @@ yarn start
 Available configuration i _.env.local_:
 
 ```
-NEXT_PUBLIC_CATEGORIES_JSON=[JSON list of categories, for example '["Category 1", "Category 2"]']
-NEXT_PUBLIC_UNIVERSES_JSON=[JSON list of categories, for example '[1,2,3,4]', defaults to '[1]']
-NEXT_PUBLIC_PRIO=[Prio as number, for example 80, defaults to 90]
+CATEGORIES_JSON=[JSON list of categories, for example '["Category 1", "Category 2"]']
+UNIVERSES_JSON=[JSON list of universes, for example '[1,2,3,4]', defaults to '[1]']
+SACN_PRIORITY=[Prio as number, for example 80, defaults to 90]
 PORT=[HTTP Port as number, for example 80, defaults to 3000]
 
 MQTT_TOPIC=[MQTT Topic for this service, optional]

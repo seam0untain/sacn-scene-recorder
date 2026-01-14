@@ -8,10 +8,10 @@ type Props = {
     nextSortIndex: number;
     setSceneToEdit: (updateFunction: (scene: SceneData | null) => SceneData | null) => void;
     sendCommand: (command: WebsocketCommand) => void;
+    universes: number[];
 };
 
-const ManageScene: FC<Props> = ({ disabled, sceneToEdit, nextSortIndex, setSceneToEdit, sendCommand }: Props) => {
-    const universes: number[] = JSON.parse(process.env.NEXT_PUBLIC_UNIVERSES_JSON ?? '[1]');
+const ManageScene: FC<Props> = ({ disabled, sceneToEdit, nextSortIndex, setSceneToEdit, sendCommand, universes }: Props) => {
     const [selectedUniverses, setSelectedUniverses] = useState<number[]>(universes);
 
     return (

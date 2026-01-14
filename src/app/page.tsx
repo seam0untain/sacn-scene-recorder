@@ -9,14 +9,14 @@ import SceneCategory from './components/sceneCategory';
 
 export default function Home() {
     const [isEditing, setIsEditing] = useState(false);
-    const [webSocketUrl, setWebSocketUrl] = useState<string|null>(null);
+    const [webSocketUrl, setWebSocketUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
         setWebSocketUrl(protocol + window.location.host);
-  }, []);
+    }, []);
 
-    const { sendMessage, lastJsonMessage, readyState } = useWebSocket<{ scenes: SceneData[] }>(webSocketUrl, {
+    const { sendMessage, lastJsonMessage, readyState } = useWebSocket<{ scenes: SceneData[], categories: string[], universes: number[] }>(webSocketUrl, {
         shouldReconnect: () => true,
     });
     const connectionStatus = {
@@ -32,8 +32,9 @@ export default function Home() {
         sendMessage(payload);
     };
 
+    const universes = lastJsonMessage?.universes ?? [];
+    const categories = lastJsonMessage?.categories ?? [];
     const scenes = lastJsonMessage?.scenes ?? [];
-    const categories: string[] = JSON.parse(process.env.NEXT_PUBLIC_CATEGORIES_JSON ?? '[]');
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-8 md:p-16">
@@ -62,6 +63,7 @@ export default function Home() {
                                 isEditing={isEditing}
                                 categoryName={category}
                                 allScenes={scenes}
+                                universes={universes}
                                 sendCommand={sendCommand}
                             />
                         ))}
